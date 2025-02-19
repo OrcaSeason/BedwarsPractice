@@ -1,0 +1,8 @@
+name: BedWarsPractice
+version: 1.0.0
+main: io.dogsbean.bedwarspractice.BedWarsPractice
+api-version: 1.8.8
+commands:
+  setup:
+    description: Setup map spawn points
+    usage: /setup <map> <bed|spawn>
