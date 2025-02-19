@@ -5,4 +5,4 @@ api-version: 1.8.8
 commands:
   setup:
     description: Setup map spawn points
-    usage: /setup <map> <bed|spawn>
+    usage: /setup <setlobby | createmap | setspawn | saveblocks> <map name>
