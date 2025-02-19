@@ -52,10 +52,7 @@ public class GameListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         if (!plugin.getGameManager().isPlayerInGame(player)) {
-            if (player.getGameMode() != GameMode.CREATIVE) {
-                event.setCancelled(true);
-                return;
-            }
+            return;
         }
 
         GameState playerState = plugin.getGameManager().getPlayerGameState(player);
