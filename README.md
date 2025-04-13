@@ -1,6 +1,7 @@
 # BedWars Practice Plugin
+(Abandoned Project. use at ur own risk)
 
-Enhance your BedWars skills with this advanced practice plugin! Perfect for players who want to master bed-breaking strategies while evading enemy attacks.
+Enhance your Bedwars skills with this advanced practice plugin! Perfect for players who want to master bed-breaking strategies while evading enemy attacks.
 
 ## Features
 
