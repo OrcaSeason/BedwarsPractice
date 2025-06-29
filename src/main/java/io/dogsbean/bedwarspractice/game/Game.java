@@ -199,10 +199,13 @@ public class Game {
         player.sendMessage(" §f⚫ §a§lDuration: §r" + getGameDuration());
         player.sendMessage(ChatColor.DARK_GRAY + ChatColor.STRIKETHROUGH.toString() + "-----------------------------------------------");
 
-        MapManager.deletePlayerWorld(player.getUniqueId());
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+            MapManager.deletePlayerWorld(player.getUniqueId());
+        }, 1L);
 
         player.teleport(MapManager.getLobbySpawn());
         player.setGameMode(GameMode.ADVENTURE);
+        player.setHealth(player.getMaxHealth());
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             LobbyManager.giveLobbyItems(player);
