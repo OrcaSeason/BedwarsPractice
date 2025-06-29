@@ -1,5 +1,6 @@
 # BedWars Practice Plugin
-(Abandoned Project. use at ur own risk)
+Abandoned Project. use at ur own risk
+Current world-per-player ststem may cause massive server lag.
 
 Enhance your Bedwars skills with this advanced practice plugin! Perfect for players who want to master bed-breaking strategies while evading enemy attacks.
 
@@ -30,7 +31,8 @@ Enhance your Bedwars skills with this advanced practice plugin! Perfect for play
 - `/setup setlobby` - Sets spawn
 - `/setup createMap <map name>` - Creates new map with specific name.
 - `/setup setspawn <map name>` - Sets spawn of map
-- `/setup saveBlocks <map name>` - Copy and saves the blocks within a 20 block radius around you to create a map
+- `/setup saveBlocks <map name>` - Save the cuboid area for map with selected pos1, 2.
+- `/setup wand` - Get a wand tool for map area creation.
 
 ## Contributing
 
