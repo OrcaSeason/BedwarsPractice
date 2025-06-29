@@ -1,16 +1,17 @@
 package io.dogsbean.bedwarspractice;
 
-import io.dogsbean.bedwarspractice.game.map.MapManager;
-import io.dogsbean.bedwarspractice.setup.command.SetupCommand;
 import io.dogsbean.bedwarspractice.game.GameListener;
 import io.dogsbean.bedwarspractice.game.GameManager;
+import io.dogsbean.bedwarspractice.game.map.MapManager;
 import io.dogsbean.bedwarspractice.lobby.LobbyListener;
+import io.dogsbean.bedwarspractice.setup.command.SetupCommand;
 import io.dogsbean.bedwarspractice.setup.listener.SetupListener;
 import io.dogsbean.bedwarspractice.setup.manager.SetupManager;
 import lombok.Getter;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 
 @Getter

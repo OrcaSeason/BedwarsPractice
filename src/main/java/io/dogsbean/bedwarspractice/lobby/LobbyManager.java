@@ -1,8 +1,8 @@
 package io.dogsbean.bedwarspractice.lobby;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class LobbyManager {

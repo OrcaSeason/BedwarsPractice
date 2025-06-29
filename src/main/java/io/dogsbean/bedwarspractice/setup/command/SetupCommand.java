@@ -1,6 +1,5 @@
 package io.dogsbean.bedwarspractice.setup.command;
 
-import io.dogsbean.bedwarspractice.BedWarsPractice;
 import io.dogsbean.bedwarspractice.game.map.MapManager;
 import io.dogsbean.bedwarspractice.setup.listener.SetupListener;
 import io.dogsbean.bedwarspractice.setup.manager.SetupManager;
