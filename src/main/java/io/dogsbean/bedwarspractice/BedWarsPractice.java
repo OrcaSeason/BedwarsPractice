@@ -5,15 +5,19 @@ import io.dogsbean.bedwarspractice.game.GameListener;
 import io.dogsbean.bedwarspractice.game.GameManager;
 import io.dogsbean.bedwarspractice.game.map.MapManager;
 import io.dogsbean.bedwarspractice.lobby.LobbyListener;
+import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 
 public class BedWarsPractice extends JavaPlugin {
+
+    @Getter
     private static BedWarsPractice instance;
     private FileConfiguration mapConfig;
     private File mapConfigFile;
+    @Getter
     private GameManager gameManager;
 
     @Override
@@ -34,14 +38,6 @@ public class BedWarsPractice extends JavaPlugin {
     public void onDisable() {
         saveMapConfig();
         getLogger().info("Bedwars Practice has been disabled!");
-    }
-
-    public static BedWarsPractice getInstance() {
-        return instance;
-    }
-
-    public GameManager getGameManager() {
-        return gameManager;
     }
 
     private void loadMapConfig() {

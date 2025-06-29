@@ -42,6 +42,7 @@ public class Game {
 
         if (spawnPoint == null) {
             player.sendMessage("§cMap is not properly set up!");
+            plugin.getGameManager().endGame(player, false);
             return;
         }
 

@@ -10,6 +10,7 @@ public class GameSettings {
     private boolean autoBreakWool = false;
     private long woolBreakDelay = 3000;
     private long woolBreakInterval = 500;
+
     public GameSettings clone() {
         GameSettings settings = new GameSettings();
         settings.setDamageAmount(this.damageAmount);
