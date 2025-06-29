@@ -1,6 +1,7 @@
 # BedWars Practice Plugin
 Abandoned Project. use at ur own risk
-Current world-per-player ststem may cause massive server lag.
+
+Current world-per-player system may cause massive server lag.
 
 Enhance your Bedwars skills with this advanced practice plugin! Perfect for players who want to master bed-breaking strategies while evading enemy attacks.
 
