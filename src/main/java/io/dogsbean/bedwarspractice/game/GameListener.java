@@ -32,6 +32,7 @@ public class GameListener implements Listener {
         Player player = event.getEntity();
         if (plugin.getGameManager().isPlayerInGame(player)) {
             event.getDrops().clear();
+            event.getEntity().setHealth(event.getEntity().getMaxHealth());
             plugin.getGameManager().endGame(player, false);
         }
     }
