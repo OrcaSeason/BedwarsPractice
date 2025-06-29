@@ -1,17 +1,23 @@
-package io.dogsbean.bedwarspractice.command;
+package io.dogsbean.bedwarspractice.setup.command;
 
 import io.dogsbean.bedwarspractice.BedWarsPractice;
 import io.dogsbean.bedwarspractice.game.map.MapManager;
+import io.dogsbean.bedwarspractice.setup.listener.SetupListener;
+import io.dogsbean.bedwarspractice.setup.manager.SetupManager;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class SetupCommand implements CommandExecutor {
-    private final BedWarsPractice plugin;
+    private final SetupManager setupManager;
 
-    public SetupCommand(BedWarsPractice plugin) {
-        this.plugin = plugin;
+    public SetupCommand(SetupManager setupManager) {
+        this.setupManager = setupManager;
     }
 
     @Override
@@ -53,6 +59,15 @@ public class SetupCommand implements CommandExecutor {
                 player.sendMessage("§aMap '" + mapName + "' has been created!");
                 break;
 
+            case "wand":
+                ItemStack wand = new ItemStack(Material.GOLD_AXE);
+                ItemMeta wandMeta = wand.getItemMeta();
+                wandMeta.setDisplayName(SetupListener.WAND_NAME);
+                wand.setItemMeta(wandMeta);
+                player.getInventory().addItem(wand);
+                player.sendMessage("§aYou have received the Selection Wand. Left-click for pos1, Right-click for pos2.");
+                break;
+
             case "setspawn":
                 if (args.length < 2) {
                     player.sendMessage("§cUsage: /setup setspawn <map>");
@@ -77,8 +92,16 @@ public class SetupCommand implements CommandExecutor {
                     player.sendMessage("§cMap '" + mapToSave + "' does not exist!");
                     return true;
                 }
-                MapManager.saveMapBlocks(mapToSave, player.getLocation());
-                player.sendMessage("§aBlocks for map '" + mapToSave + "' have been saved!");
+
+                if (!setupManager.hasFullSelection(player)) {
+                    player.sendMessage("§cYou must make a full selection with the wand first! (/setup wand)");
+                    return true;
+                }
+
+                Location pos1 = setupManager.getPos1(player);
+                Location pos2 = setupManager.getPos2(player);
+                MapManager.saveMapBlocks(mapToSave, pos1, pos2);
+                player.sendMessage("§aBlocks for map '" + mapToSave + "' have been saved from your selection!");
                 break;
 
             default:
@@ -93,7 +116,8 @@ public class SetupCommand implements CommandExecutor {
         player.sendMessage("§6§lBedwars Practice Setup Commands");
         player.sendMessage("§7/setup setlobby §f- Set the lobby spawn point");
         player.sendMessage("§7/setup createmap <name> §f- Create a new map");
+        player.sendMessage("§7/setup wand §f- Get the selection wand");
         player.sendMessage("§7/setup setspawn <map> §f- Set spawn point for a map");
-        player.sendMessage("§7/setup saveblocks <map> §f- Save blocks for a map");
+        player.sendMessage("§7/setup saveblocks <map> §f- Save blocks for a map from your wand selection");
     }
 }

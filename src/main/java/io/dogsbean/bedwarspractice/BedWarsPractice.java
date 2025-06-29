@@ -1,24 +1,26 @@
 package io.dogsbean.bedwarspractice;
 
-import io.dogsbean.bedwarspractice.command.SetupCommand;
+import io.dogsbean.bedwarspractice.setup.command.SetupCommand;
 import io.dogsbean.bedwarspractice.game.GameListener;
 import io.dogsbean.bedwarspractice.game.GameManager;
-import io.dogsbean.bedwarspractice.game.map.MapManager;
 import io.dogsbean.bedwarspractice.lobby.LobbyListener;
+import io.dogsbean.bedwarspractice.setup.listener.SetupListener;
+import io.dogsbean.bedwarspractice.setup.manager.SetupManager;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 
+@Getter
 public class BedWarsPractice extends JavaPlugin {
 
-    @Getter
-    private static BedWarsPractice instance;
+    @Getter private static BedWarsPractice instance;
     private FileConfiguration mapConfig;
     private File mapConfigFile;
-    @Getter
+
     private GameManager gameManager;
+    private SetupManager setupManager;
 
     @Override
     public void onEnable() {
@@ -26,11 +28,14 @@ public class BedWarsPractice extends JavaPlugin {
         loadMapConfig();
 
         gameManager = new GameManager(this);
+        setupManager = new SetupManager();
 
         getServer().getPluginManager().registerEvents(new LobbyListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
 
-        getCommand("setup").setExecutor(new SetupCommand(this));
+        getServer().getPluginManager().registerEvents(new SetupListener(setupManager), this);
+
+        getCommand("setup").setExecutor(new SetupCommand(setupManager));
         getLogger().info("Bedwars Practice has been enabled!");
     }
 

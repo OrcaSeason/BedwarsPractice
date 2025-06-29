@@ -1,6 +1,7 @@
 package io.dogsbean.bedwarspractice.game.map;
 
 import io.dogsbean.bedwarspractice.BedWarsPractice;
+import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -12,19 +13,15 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class MapManager {
+    @Setter
     private static Location lobbySpawn;
     private static final HashMap<UUID, String> playerWorlds = new HashMap<>();
-    private static final int SCAN_RADIUS = 20;
 
     public static Location getLobbySpawn() {
         if (lobbySpawn == null) {
             return BedWarsPractice.getInstance().getServer().getWorlds().get(0).getSpawnLocation();
         }
         return lobbySpawn;
-    }
-
-    public static void setLobbySpawn(Location location) {
-        lobbySpawn = location;
     }
 
     public static void createMap(String mapName) {
@@ -58,26 +55,37 @@ public class MapManager {
         saveLocationToConfig("maps." + mapName + ".spawn", location);
     }
 
-    public static void saveMapBlocks(String mapName, Location center) {
+    public static void saveMapBlocks(String mapName, Location pos1, Location pos2) {
         ConfigurationSection mapSection = BedWarsPractice.getInstance().getMapConfig().getConfigurationSection("maps." + mapName);
         if (mapSection == null) {
             mapSection = BedWarsPractice.getInstance().getMapConfig().createSection("maps." + mapName);
         }
 
+        mapSection.set("blocks", null);
         ConfigurationSection blocksSection = mapSection.createSection("blocks");
+
         int blockCount = 0;
+        World world = pos1.getWorld();
 
-        for (int x = -SCAN_RADIUS; x <= SCAN_RADIUS; x++) {
-            for (int y = -SCAN_RADIUS; y <= SCAN_RADIUS; y++) {
-                for (int z = -SCAN_RADIUS; z <= SCAN_RADIUS; z++) {
-                    Location blockLoc = center.clone().add(x, y, z);
-                    Block block = blockLoc.getBlock();
+        int minX = Math.min(pos1.getBlockX(), pos2.getBlockX());
+        int minY = Math.min(pos1.getBlockY(), pos2.getBlockY());
+        int minZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
 
-                    if (block.getType().isSolid()) {
+        int maxX = Math.max(pos1.getBlockX(), pos2.getBlockX());
+        int maxY = Math.max(pos1.getBlockY(), pos2.getBlockY());
+        int maxZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    Block block = world.getBlockAt(x, y, z);
+
+                    if (block.getType() != org.bukkit.Material.AIR) {
                         ConfigurationSection blockSection = blocksSection.createSection(String.valueOf(blockCount));
-                        blockSection.set("x", blockLoc.getX());
-                        blockSection.set("y", blockLoc.getY());
-                        blockSection.set("z", blockLoc.getZ());
+
+                        blockSection.set("x", (double) x);
+                        blockSection.set("y", (double) y);
+                        blockSection.set("z", (double) z);
                         blockSection.set("type", block.getType().name());
                         blockSection.set("data", block.getData());
                         blockCount++;
@@ -88,6 +96,7 @@ public class MapManager {
 
         BedWarsPractice.getInstance().saveMapConfig();
     }
+
 
     public static String getAvailableMap() {
         ConfigurationSection mapsSection = BedWarsPractice.getInstance().getMapConfig().getConfigurationSection("maps");
