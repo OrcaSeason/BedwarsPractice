@@ -1,5 +1,6 @@
 package io.dogsbean.bedwarspractice;
 
+import io.dogsbean.bedwarspractice.game.map.MapManager;
 import io.dogsbean.bedwarspractice.setup.command.SetupCommand;
 import io.dogsbean.bedwarspractice.game.GameListener;
 import io.dogsbean.bedwarspractice.game.GameManager;
@@ -41,6 +42,7 @@ public class BedWarsPractice extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        MapManager.shutdown();
         saveMapConfig();
         getLogger().info("Bedwars Practice has been disabled!");
     }

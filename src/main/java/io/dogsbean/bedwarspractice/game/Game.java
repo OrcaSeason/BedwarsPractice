@@ -38,49 +38,55 @@ public class Game {
     }
 
     public void start() {
-        Location spawnPoint = MapManager.getSpawnPoint(mapName, player.getUniqueId());
-
-        if (spawnPoint == null) {
-            player.sendMessage("§cMap is not properly set up!");
+        if (MapManager.isPlayerWorldExists(player.getUniqueId())) {
+            player.sendMessage("§cPlease try again later.");
             plugin.getGameManager().endGame(player, false);
             return;
         }
 
-        player.teleport(spawnPoint);
-        player.setGameMode(GameMode.SURVIVAL);
-        player.getInventory().clear();
-        player.setHealth(20.0);
-        player.setFoodLevel(20);
+        MapManager.createPlayerWorldAsync(mapName, player.getUniqueId(),
+                spawnPoint -> {
+                    player.teleport(spawnPoint);
+                    player.setGameMode(GameMode.SURVIVAL);
+                    player.getInventory().clear();
+                    player.setHealth(20.0);
+                    player.setFoodLevel(20);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            giveStartingItems();
-            player.updateInventory();
-        }, 1L);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        giveStartingItems();
+                        player.updateInventory();
+                    }, 1L);
 
-        player.sendMessage("\n§6§lBreak the Bed!");
-        player.sendMessage("§7Stay surrounded!\n" +
-                "§7If there's any open space around or above you,\n" +
-                "§7you'll lose health over time.\n");
+                    player.sendMessage("\n§6§lBreak the Bed!");
+                    player.sendMessage("§7Stay surrounded!\n" +
+                            "§7If there's any open space around or above you,\n" +
+                            "§7you'll lose health over time.\n");
 
-        new BukkitRunnable() {
-            int count = 3;
+                    new BukkitRunnable() {
+                        int count = 3;
 
-            @Override
-            public void run() {
-                if (count > 0) {
-                    player.sendMessage(ChatColor.YELLOW.toString() + count + "...");
-                    count--;
-                } else {
-                    player.sendMessage("§a§lGame Started!");
-                    state = GameState.PLAYING;
-                    startDamageCheck();
-                    if (settings.isAutoBreakWool()) {
-                        startWoolBreakTask();
-                    }
-                    cancel();
+                        @Override
+                        public void run() {
+                            if (count > 0) {
+                                player.sendMessage(ChatColor.YELLOW.toString() + count + "...");
+                                count--;
+                            } else {
+                                player.sendMessage("§a§lGame Started!");
+                                state = GameState.PLAYING;
+                                startDamageCheck();
+                                if (settings.isAutoBreakWool()) {
+                                    startWoolBreakTask();
+                                }
+                                cancel();
+                            }
+                        }
+                    }.runTaskTimer(plugin, 0L, 20L);
+                },
+                () -> {
+                    player.sendMessage("§cMap is not properly set up!");
+                    plugin.getGameManager().endGame(player, false);
                 }
-            }
-        }.runTaskTimer(plugin, 0L, 20L);
+        );
     }
 
     private void startDamageCheck() {
@@ -201,7 +207,7 @@ public class Game {
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
             MapManager.deletePlayerWorld(player.getUniqueId());
-        }, 1L);
+        }, 20L);
 
         player.teleport(MapManager.getLobbySpawn());
         player.setGameMode(GameMode.ADVENTURE);
